@@ -1,0 +1,58 @@
+#+BIND: org-export-filter-timestamp-functions (tmp-f-timestamp)
+#+BIND: org-export-filter-strike-through-functions (tmp-f-strike-through)
+#+BIND: org-export-filter-final-output-functions (my-bash-filter-comment-line)
+#+BEGIN_SRC emacs-lisp :exports results :results none
+(defun tmp-f-timestamp (s backend info)
+  (replace-regexp-in-string "&[lg]t;\\|[][]" "" s))
+(defun tmp-f-strike-through (s backend info) "")
+(defun my-bash-filter-comment-line (text backend info)
+  "Make each line of text a bash comment"
+  (progn
+    (replace-regexp-in-string "^" "FOO " text))
+    (message "FUBAR")
+    )
+#+END_SRC
+
+
+* Intro                                                            :noexport:
+This is a test to see if I can use org mode to format my .bashrc and
+export the actual .bashrc file.
+
+Because, editing things that are not org files is just wrong.
+
+* So, here's how I started  - export and sed
+
+  - I exported this file to text and ran
+
+    #+begin_example
+    cat bashrc.txt  | sed 's/^/# /' | sed 's/#   .//' | sed 's/^---.*//'
+    #+end_example
+
+    on the result, which left the bash code as bash and everything
+    else as bash comments
+
+* Doing it the org-export way - per file export hooks
+
+  But it looks like there is a better way.  Per-file org export hooks:
+
+  https://orgmode.org/manual/Advanced-Export-Configuration.html#Advanced-Export-Configuration
+
+
+
+* The helper functions
+
+  #+begin_src bash :exports code
+
+# Helper functions
+#PROG=`basename "$0" | tr -d '\n'`
+PROG="bashrc"
+
+function info()  { echo ${PROG}\: info: "$@" 1>&2; }
+function warn()  { echo ${PROG}\: warning: "$@" 1>&2; }
+function error() { echo ${PROG}\: error: "$@" 1>&2; }
+function debug() { [[ -v DEBUG ]] && echo ${PROG}\: debug: "$@" 1>&2 || true ; }
+function die()   { echo ${PROG}\: fatal: "$@" 1>&2 && exit 1; }
+
+#+end_src
+
+#+RESULTS:

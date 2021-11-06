@@ -1,0 +1,272 @@
+* What
+  Functions to perform array operations in bash
+* Why
+  - I find the native syntax obtuse
+  - I like readable, understandable code
+  - I'm pretty sure bash is not going again
+  - Arrays are useful (well, pretty fundemental) to most code.
+  - Learn more bash
+
+* Why not
+
+  From http://robertmuth.blogspot.com/2012/08/better-bash-scripting-in-15-minutes.html
+
+  #+begin_quote
+  Signs you should not be using a bash script:
+  - your script is longer than a few hundred lines of code
+  - you need data structures beyond simple arrays
+  - you have a hard time working around quoting issues
+  - you do a lot of string manipulation
+  - you do not have much need for invoking other programs or pipe-lining them
+  - you worry about performance
+  #+end_quote
+
+  To which I might add, "You find yourself writing a group of array
+  functions to make bash arrays work more like python arrays
+  
+* Who
+  - George Jones <gmj@pobox.com> 
+  - Snippits and borrowing from all over, cited.
+
+* When
+  <2015-07-30 Thu>
+
+* Where  
+
+* How
+
+  - Define obviously named functions to do array operations.
+
+    Some possibly useful references:
+    - See http://rosettacode.org/wiki/Arrays#UNIX_Shell
+    - Maybe see http://mywiki.wooledge.org/BashFAQ/006
+    - http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html
+
+** Create an array
+  #+name: arrayCreate
+  #+begin_src sh  :results output :exports both
+  exec 2>&1;set -e; set -u; set +x; echo '#' `date;`
+
+  source bashArrays.sh
+
+  unset foo
+  
+  pass=0
+  fail=0
+
+  errMsg=$(arrayCreate 2>&1) || true
+  arrayTest "Test missing array name" errMsg "createArray: Missing array name."  && ((pass+=1)) || ((fail+=1))
+
+  arrayCreate foo || true
+  arrayTest "Create array with no values" foo ""  && ((pass+=1)) || ((fail+=1))
+
+  arrayCreate foo  bar || true
+  arrayTest "Create array with one value" foo bar  && ((pass+=1)) || ((fail+=1))
+ 
+  arrayCreate foo  bar baz|| true
+  arrayTest "Create array with two values" foo bar baz && ((pass+=1)) || ((fail+=1))
+
+  #+end_src
+
+  #+RESULTS[9ef573b8eac102deebccfc2800dff5a7d0214706]: arrayCreate
+  : # Sat Aug 1 10:59:04 EDT 2015
+  : pass: Test missing array name
+  : pass: Create array with no values
+  : pass: Create array with one value
+  : pass: Create array with two values
+
+
+
+  
+** Append to an array
+  #+name: arrayAppend
+  #+begin_src sh  :results output :exports both
+      exec 2>&1;set -e; set -u; set +x; echo '#' `date;`
+
+      source bashArrays.sh
+
+      unset foo
+  
+      pass=0
+      fail=0
+      echo foo baz
+
+      # --- Test Setup ---
+      testName="Test missing array name"
+      expectedResults="arrayAppend: Missing array name."
+      # --- Run test ---
+      errMsg=$(arrayAppend 2>&1) || true
+      # --- Report Results ---
+      arrayTest "$testName" errMsg "$expectedResults" && ((pass+=1)) || ((fail+=1))
+
+
+      # --- Test Setup ---
+      testName="Attempt to append one element to a non-arrray"
+      unset foo
+      foo="bar"
+      expectedResults="arrayAppend: foo is not an array "
+      # --- Run test ---
+      errMsg=$(arrayAppend foo bar 2>&1) || true
+      #actualResults=("$errMeg")
+      #echo results $results
+      # --- Report Results ---
+      arrayTest "$testName: errMsg=/$errMsg/" foo $expectedResults  && ((pass+=1)) || ((fail+=1))
+
+
+      # --- Test Setup ---
+      testName="Append one element to non-existant array"
+      unset foo
+      expectedResults=""
+      # --- Run test ---
+      arrayAppend foo bar || true
+      actualResults="${foo[@]-}"
+      # --- Report Results ---
+      arrayTest "$testName: foo=/$actualResults/" foo $expectedResults  && ((pass+=1)) || ((fail+=1))
+
+      # --- Test Setup ---
+      testName="Append one element to existing empty array"
+      foo=()
+      expectedResults="bar"
+      # --- Run test ---
+      arrayAppend foo bar || true
+      actualResults="${foo[@]-}"
+      #echo results $results
+      # --- Report Results ---
+      arrayTest "$testName: foo=/$actualResults/" foo $expectedResults  && ((pass+=1)) || ((fail+=1))
+
+
+      # --- Test Setup ---
+      testName="Append one element to existing non-empty array"
+      foo=(foo)
+      expectedResults="foo bar"
+      # --- Run test ---
+      arrayAppend foo bar || true
+      actualResults="${foo[@]-}"
+      #echo results $results
+      # --- Report Results ---
+      arrayTest "$testName: foo=/$actualResults/" foo $expectedResults  && ((pass+=1)) || ((fail+=1))
+
+  #+end_src
+
+  #+RESULTS[da4ef9abb85551ed1c13b8585c8fb352e6c82657]: arrayAppend
+
+
+
+
+
+** Test variables to see if they are arrays
+  #+begin_src sh  :results output :exports both
+  exec 2>&1;set -e; set -u; set +x; echo '#' `date;`
+
+  source bashArrays.sh
+  pass=0
+  fail=0
+
+  array="noArray"
+  if isArray 2> /dev/null ; then value="noArray is an array"; else value="noArray is not an array"; fi
+  arrayTest "isArray run with no name"  value "noArray is not an array" && ((pass+=1)) || ((fail+=1))
+
+  if isArray "" ; then value="empty string is an array"; else value="empty string is not an array"; fi
+  arrayTest "isArray with an empty string" value "empty string is not an array" && ((pass+=1)) || ((fail+=1))
+
+  foo="foo"
+  if isArray foo ; then value="foo is an array"; else value="foo is not an array"; fi
+  arrayTest "isArray run on string" value "foo is not an array" && ((pass+=1)) || ((fail+=1))
+
+
+  foo=(foo bar)
+  if isArray bar ; then value="foo is an array"; else value="foo is not an array"; fi
+  arrayTest "isArray run on array" value "foo is an array" && ((pass+=1)) || ((fail+=1))
+
+
+  #+end_src
+
+  #+RESULTS[9be0f9156f51054d6817aecee9ec4114aa8d1792]:
+  : # Sat Aug 1 09:42:59 EDT 2015
+  : pass: isArray run with no name
+  : isArray: Missing array name.
+  : pass: isArray with an empty string
+  : pass: isArray run on string
+  : fail: isArray run on array
+
+
+
+** Append to an array OLD
+  #+name: arrayAppendold
+  #+begin_src sh  :results output :exports both
+#  exec 2>&1;set -e; set -u; set +x; echo '#' `date;`
+    set -u;  set +x; echo '#' `date;`
+
+  source bashArrays.sh
+  
+  echo 
+  echo APPEND TO ARRAY
+  echo 
+
+  arrayCreate qux 2>&1 || true
+  echo qux is ${qux[@]:-}
+  echo
+ 
+  arrayAppend qux one || true
+  echo foo is ${foo[@]:-} || true
+  echo
+  
+  arrayAppend quuux two three || true
+  echo quuux is ${quuux[@]:-''} || true
+  echo
+
+  arrayAppend || true
+  echo quuux is ${quuux[@]:-''} || true
+  echo
+   
+  #+end_src
+
+
+
+
+ 
+
+
+  #
+  # Prepend to an array
+  #
+
+  #
+  # test if array contains an element
+  # http://stackoverflow.com/questions/3685970/check-if-an-array-contains-a-value
+
+  if 
+
+  #
+  # Remove element form an array
+  #
+
+  #
+  # Split to create an array
+  #
+
+  #
+  # Join array to create string
+  #
+
+  #
+  # Delete an array
+  #
+
+  #
+  # Test
+  #
+
+  arrayCreate "foo"
+
+  echo Done.
+  #+end_src
+
+  #+RESULTS:
+  : # Thu Jul 30 05:24:52 EDT 2015
+  : foo
+  : Done.
+
+
+
+ 

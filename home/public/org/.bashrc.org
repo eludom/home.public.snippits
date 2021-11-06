@@ -1,0 +1,54 @@
+* Bashrc export
+  Experiments with after-save-hook to allow me to use org mode with my .bashrc
+
+#+begin_src emacs-lisp
+(defvar backup-repo (directory-file-name "/private/tmp")
+"NOTE:  `directory-file-name` makes it so that the user may either omit, or
+include the forward trailing slash at the end of the `backkup-repo` path.")
+
+(defun after-save-hook-fn ()
+  (let
+      (bashrc-filename
+       shell-command
+       shell output)
+    (if (string-match-p ".*.bashrc.org" buffer-file-name)
+        (progn
+          (message "MATCH")
+          (setq bashrc-filename
+                (replace-regexp-in-string ".org$" "" buffer-file-name))
+
+          ;; Really, I did play with org mode hooks first to try to get this work
+
+          (setq shell-command
+                (concat
+                 "cat "
+                 buffer-file-name
+                 "| sed 's/^/# /'"
+                 ;; "| sed 's/^/# /' | sed 's/#   .//' | sed 's/^---.*//'"
+                 "> "
+                 bashrc-filename
+                 ))
+
+          ;;(message (concat "COMMAND " shell-command)
+          (setq
+           shell-output
+           (shell-command-to-string shell-command))
+          (message (concat "shell-output" shell-output)
+          ))
+
+       (message "NO MATCH"))))
+
+  ;; (let* (
+  ;;     (backup-repo-filename
+  ;;       (when buffer-file-name (concat backup-repo buffer-file-name)))
+  ;;     (dir (when backup-repo-filename (file-name-directory backup-repo-filename))) )
+  ;;   (when buffer-file-name
+  ;;     (when (not (file-exists-p dir))
+  ;;        (make-directory dir t))
+  ;;     (write-region (point-min) (point-max) backup-repo-filename))))
+
+(add-hook 'after-save-hook 'after-save-hook-fn)
+#+end_src
+
+#+RESULTS:
+| after-save-hook-fn | rmail-after-save-hook |

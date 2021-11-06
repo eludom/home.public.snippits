@@ -1,0 +1,45 @@
+* TODO Define functions to export bash scripts
+
+  Here is
+
+  Some text
+
+  #+begin_src emacs-lisp
+;;  Make sure we're starting with an ampty list
+(setq org-export-filter-final-output-functions ())
+
+
+;; Add filter to Add bash comment to the start of every line
+;;
+(defun my-final-output-filter (text backend info)
+  "Addd bash comment to start of every line"
+  (replace-regexp-in-string "^" "## " text))
+
+; add it to the export filters
+(add-to-list 'org-export-filter-final-output-functions
+                  'my-final-output-filter)
+
+
+Add filter to uncomment actual bash code in export
+
+(defun my-final-output-filter2 (text backend info)
+  "Uncomment actual bash code"
+  (if (string-match-p "|   " text)
+      (replace-regexp-in-string "[ ]+|" "" text)
+    (replace-regexp-in-string "^" "X" text)))
+
+
+;; ; add it to the export fileters
+;; (add-to-list 'org-export-filter-final-output-functions
+;;                   'my-final-output-filter2)
+  #+end_src
+
+  #+RESULTS:
+  | my-final-output-filter |
+
+
+
+  * foo
+    bar
+
+  more text
