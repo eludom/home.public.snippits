@@ -1,26 +1,23 @@
 # https://cuddly-octo-palm-tree.com/posts/2021-10-31-better-bash-functions/
 f() (
     # code
-    var1=${1:-"default value"}
+    var1=${1:-"default"}
 
-    # Always return numeric status (that's all bash supports)
-    #
-    # 0 == succuess
-    # other == failure
+    
+    if [ "${var1}" == "default" ]; then
+        echo errors and warning messages to stderr 1>&2
+        return 1 # error, outut undefined
+    fi
 
-    echo errors and warning messages to stderr 1>&2
-
-    echo "string return value to stdout - var1 is $var1"
-    return 1 
+    echo "stirng value to stdout"
+    return 0 # success, output defined
 )
 
 
-f
+return=`f` && echo SUCCESS return value is $return  || echo FAILURE no return
 echo
 
-f foo
+return=`f FOO` && echo SUCCESS return value is $return  || echo FAILURE no return
 echo
 
-f bar
-echo
 
