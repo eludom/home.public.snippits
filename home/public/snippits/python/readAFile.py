@@ -8,5 +8,4 @@ import sys
 with open("foo.txt") as fileHandle:
     for line in fileHandle:
         line = line.strip()
-        print "line is /%s/" % (line)
-       
+        print(f"line is /{line}/")
