@@ -14,7 +14,7 @@ foo_dict["baz"] = "A baz"
 print(f"foo_dict: {foo_dict}")
 
 # create json a string
-foo_json = json.dumps(foo_dict)
+foo_json = json.dumps(foo_dict,indent=4)
 
 print(f"foo_json: {foo_json}")
 
