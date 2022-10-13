@@ -31,3 +31,9 @@ if retval=`f BAR`; then
 else
     echo f with an argument failed
 fi
+
+if f BAR; then
+    echo f with an argument succeeded, ignoring retval
+else
+    echo f with an argument failed
+fi
