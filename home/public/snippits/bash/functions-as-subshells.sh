@@ -5,11 +5,11 @@ f() (
 
     
     if [ "${var1}" == "default" ]; then
-        echo errors and warning messages to stderr 1>&2
+        #echo errors and warning messages to stderr 1>&2
         return 1 # error, outut undefined
     fi
 
-    echo "stirng value to stdout"
+    echo "StirngValueOnSTDOUT"
     return 0 # success, output defined
 )
 
@@ -20,4 +20,14 @@ echo
 return=`f FOO` && echo SUCCESS return value is $return  || echo FAILURE no return
 echo
 
+if retval=f; then
+    echo f with no argument succeeded
+else
+    echo f with no argument failed
+fi
 
+if retval=`f BAR`; then
+    echo f with an argument succeeded and retval is $retval
+else
+    echo f with an argument failed
+fi
