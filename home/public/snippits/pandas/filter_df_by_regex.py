@@ -22,7 +22,8 @@ df = pd.DataFrame(data)
 # 5   Chevy    Pickups       3
 
 # Now print only rows that have an "e" in the Type
-# preceeded by a capitol letter (that's how I choose
-# my cars :-))
+# preceeded by a capitol letter or has a "u"
+#
+# That's how I choose# my cars :-)
 
-print(df[df["Type"].str.contains('[A-Z]e',regex=True)])
+print(df[df["Type"].str.contains('[A-Z]e|u',regex=True)])
