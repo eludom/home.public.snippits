@@ -28,8 +28,10 @@
 
 #
 # http://www.linuxjournal.com/content/return-values-bash-functions
-# 
-
+#
+# Also see, c.a. 2022-10-18, very helpful
+#
+#   https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
 
 
 source bashUtils.sh
