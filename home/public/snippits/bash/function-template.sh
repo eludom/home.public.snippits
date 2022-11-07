@@ -1,4 +1,4 @@
-# This is my bash function template.  
+# This is my bash function template.
 #
 # Usage:
 #   source THISFILE
@@ -8,9 +8,13 @@
 #   example foo         # run with one arg
 #   example foo bar     # run with two args
 
-#
-#
 source $HOME/lib/bash/bashutils.sh  # error,warning,...
+# source my log functions or use echo
+source ~/lib/bash/bashutils.sh || \
+    alias info=echo && \
+    alias warn=echo && \
+    alias error=echo
+
 
 ARGV=("$@")
 ARGC=("$#")
@@ -60,10 +64,10 @@ EOF
     else
         echo # do something with ARG2
     fi
-    
+
     cmd="echo $ARG1 $ARG2"
     debug "command: ${cmd}" # export DEBUG=1 for debugging
-    
+
     [[ -v DEBUG ]] && set -x
 
     echo args are $* || warn "something went wrong"

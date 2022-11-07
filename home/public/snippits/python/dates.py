@@ -21,7 +21,6 @@ print(diff)
 # minus 1 year
 
 oneYearAgoDate = datetime.now() - relativedelta(years=1)
-
 oneYearAgoString = oneYearAgoDate.strftime('%Y-%m-%d')
 
 print(oneYearAgoString)
