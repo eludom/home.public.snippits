@@ -1,0 +1,80 @@
+#+TITLE: Grep Patterns ... things I never knew.
+
+This was an exercise to understand GNU grep regular expressions and
+options.
+
+https://man7.org/linux/man-pages/man1/grep.1.html
+
+#+begin_example sh
+
+#
+# The normal use cases
+#
+
+# A file to grep
+$ cat foo.txt
+foo
+foo foo
+foo bar
+foo bar baz
+foo|bar|ba
+
+# basic regexs (-G) by default. '|' NOT special.
+$ grep 'bar|baz' foo.txt
+foo|bar|baz
+
+# same
+$ grep -e 'bar|baz' foo.txt
+foo|bar|baz
+
+# basic regexps.  '\' to make '|' "special"
+$ grep  'bar\|baz' foo.txt
+foo bar
+foo bar baz
+foo|bar|baz
+
+# extended expressions. '|' IS special.
+$ grep -E 'bar|baz' foo.txt
+foo bar
+foo bar baz
+foo|bar|baz
+
+#
+# The suprizing truth about "-e|--regexp"
+#
+
+# -e (and --regex ) specify PATTERNs, NOT regexps
+#
+# "-e 'bar|baz'" specifies 'bar|baz'  as a PATTERN NOT a regexp.
+#
+# The (non-)interpretation of patterns as regexps
+# comes from the use of -G (default), -E, -F or -P
+#
+# In this example it is a basic regex because -G is implied.
+#
+$ grep -e 'bar|baz' foo.txt
+foo|bar|baz
+
+
+#
+# newlines to separate patterns.  Who knew?
+#
+
+# per the man page:
+# NAME
+#        grep - print lines that match patterns
+#
+# SYNOPSIS
+#        grep [OPTION...] PATTERNS [FILE...]
+#
+# DESCRIPTION
+#        grep  searches  for  PATTERNS  in  each  FILE.  PATTERNS is one or more
+#        patterns separated by newline characters,
+#                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#
+
+$ grep `printf 'bar\nbaz'` foo.txt
+foo.txt:foo bar
+foo.txt:foo bar baz
+foo.txt:foo|bar|baz
+#+end_example
