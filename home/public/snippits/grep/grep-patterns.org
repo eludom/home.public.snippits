@@ -17,7 +17,7 @@ foo
 foo foo
 foo bar
 foo bar baz
-foo|bar|ba
+foo|bar|baz
 
 # basic regexs (-G) by default. '|' NOT special.
 $ grep 'bar|baz' foo.txt
