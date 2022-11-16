@@ -1,0 +1,78 @@
+Demonstrate use of sessions with bash in org babel.
+
+* Simple command, set a variable
+
+  Get basics about the shell, etc.  Set a varable
+
+#+begin_src bash :exports both :results output :session TEST
+date
+echo SHELL is $SHELL
+echo BASH_VERSION is $BASH_VERSION
+echo PID is $$
+SET_IN_FIRST_BLOCK=something
+#+end_src
+
+#+RESULTS:
+: Wed Nov 16 07:45:29 AM EST 2022
+: SHELL is /bin/bash
+: BASH_VERSION is 5.1.16(1)-release
+: PID is 73788
+
+* Simple command, read variable set
+
+  Get pid. Should be same as previous example.
+
+  See if the variable exists
+
+#+begin_src bash :exports both :results output :session TEST
+date
+echo PID is $$
+[[ -v SET_IN_FIRST_BLOCK ]] && \
+    echo SET_IN_FIRST_BLOCK is $SET_IN_FIRST_BLOCK || \
+        echo SET_IN_FIRST_BLOCK is not defined
+#+end_src
+
+#+RESULTS:
+: Wed Nov 16 07:45:32 AM EST 2022
+: PID is 73788
+: > > SET_IN_FIRST_BLOCK is something
+
+
+* Setup - Don't ask about resetting the session
+
+  Pay no attention to that man behind the curtain.
+
+  This is emacs lisp foo that turn of prompting when killing the
+  buffer running the shell.
+
+#+BEGIN_SRC elisp
+  (setq kill-buffer-query-functions
+    (remq 'process-kill-buffer-query-function
+           kill-buffer-query-functions))
+#+END_SRC
+
+#+RESULTS:
+
+* Reset the session :results output
+
+  Kill the TEST session.   Variables, PID should reset.
+
+  https://emacs.stackexchange.com/questions/5293/how-to-force-an-org-babel-session-to-reset-or-initialize
+  #+begin_src bash :exports both :results output :session  (if (get-buffer "TEST") (if (kill-buffer "TEST") (print "TEST") (print "TEST")) (print "TEST"))
+
+  PS1="$ "
+  date
+  echo TEST session killed
+  echo PID is $$
+
+  [[ -v SET_IN_FIRST_BLOCK ]] && \
+    echo SET_IN_FIRST_BLOCK is $SET_IN_FIRST_BLOCK || \
+        echo SET_IN_FIRST_BLOCK is not defined
+  #+end_src
+
+  #+RESULTS:
+  :
+  : gmj@mx:$ Wed Nov 16 07:45:39 AM EST 2022
+  : TEST session killed
+  : PID is 73860
+  : gmj@mx:$ > > SET_IN_FIRST_BLOCK is not defined
