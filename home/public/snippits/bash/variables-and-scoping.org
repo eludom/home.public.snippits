@@ -1,0 +1,248 @@
+Some examples of scoping in bash.    Because I forget.   This makes it clear.
+
+
+* Print shell verion
+#+begin_src bash :exports both :results output :session
+date
+echo SHELL is $SHELL
+echo BASH_VERSION is $BASH_VERSION
+#+end_src
+
+#+RESULTS:
+: Thu Nov 17 03:49:42 AM EST 2022
+: SHELL is /bin/bash
+: BASH_VERSION is 5.1.16(1)-release
+
+# echo SHELL is $SHELL
+# echo BASH_VERSION is $BASH_VERSION
+
+* Setup - Don't ask about resetting the session                    :noexport:
+
+  Pay no attention to that man behind the curtain.
+
+  This is emacs lisp foo that turn of prompting when killing the
+  buffer running the shell.
+
+#+BEGIN_SRC elisp
+  (setq kill-buffer-query-functions
+    (remq 'process-kill-buffer-query-function
+           kill-buffer-query-functions))
+#+END_SRC
+
+#+RESULTS:
+
+* Reset the session :results output                                :noexport:
+
+  Kill the TEST session.   Variables, PID should reset.
+
+  https://emacs.stackexchange.com/questions/5293/how-to-force-an-org-babel-session-to-reset-or-initialize
+  #+begin_src bash :exports both :results output :session  (if (get-buffer "TEST") (if (kill-buffer "TEST") (print "TEST") (print "TEST")) (print "TEST"))
+
+  PS1="$ "
+  date
+  echo TEST session killed
+  echo PID is $$
+
+  [[ -v SET_IN_FIRST_BLOCK ]] && \
+    echo SET_IN_FIRST_BLOCK is $SET_IN_FIRST_BLOCK || \
+        echo SET_IN_FIRST_BLOCK is not defined
+  #+end_src
+
+  #+RESULTS:
+  :
+  : gmj@mx:$ Thu Nov 17 02:38:41 AM EST 2022
+  : TEST session killed
+  : PID is 88632
+  : gmj@mx:$ > > SET_IN_FIRST_BLOCK is not defined
+
+
+
+* Test/demonstrate scoping of variables in bash functions
+** Code
+#+begin_src bash :exports both :results output :session
+date
+echo
+
+FOO=FOO-set-outside-functon
+function baz { echo inside baz FOO is $FOO; FOO=FOO-set-inside-inside; }
+baz
+echo FOO is $FOO
+
+#+end_src
+** Conclusions
+   Bash variables are simply global.
+
+
+#+RESULTS:
+: Thu Nov 17 03:44:59 AM EST 2022
+: inside baz FOO is FOO-set-outside-functon
+: FOO is FOO-set-inside-inside
+
+
+* Test/demonstrate scoping of variables in bash functions using subprocesses
+** Code
+#+begin_src bash :exports both :results output :session
+date
+echo
+
+FOO=FOO-set-outside-functon
+function baz { (echo inside baz FOO is $FOO; FOO=FOO-set-inside-inside;) }
+echo
+baz
+echo
+echo FOO is $FOO
+
+#+end_src
+
+#+RESULTS:
+: Thu Nov 17 03:52:35 AM EST 2022
+:
+:
+: inside baz FOO is FOO-set-outside-functon
+:
+: FOO is FOO-set-outside-functon
+
+** Conclusions
+
+   Running in a sub-shell, the function receives copies (via fork(2))
+   of global variables, but then they, and any variables defined in
+   the function remain local to the function.  This is better.   Only
+   downside is creation of a process  ... heavy-weight operation.  OK
+   if not used in heavy processing
+
+
+#+RESULTS:
+: Thu Nov 17 03:44:59 AM EST 2022
+: inside baz FOO is FOO-set-outside-functon
+: FOO is FOO-set-inside-inside
+
+
+
+
+* Test/demonstrate scoping of EXPORT variables in bash
+** Code
+#+begin_src bash :exports both :results output :session
+date
+
+
+# set FOO to known state
+unset FOO
+FOO=bar
+
+# expand FOO in "normal" function
+function f { echo In f, FOO is $FOO; }
+f
+
+# expand FOO in "subprocess" function
+function g { (echo In g, FOO in subprocess is $FOO) }
+g
+
+# expand FOO in a separate command/script
+cat > h <<'EOF'
+#! /bin/bash
+set -u
+[[ -v FOO ]] && echo in h FOO is $FOO || echo in h FOO is not defined
+EOF
+chmod +x h
+./h
+# not defined
+
+# export it, now seen via ENV
+export FOO
+./h
+
+#+end_src
+
+#+RESULTS:
+: Thu Nov 17 04:14:03 AM EST 2022
+: In f, FOO is bar
+: In g, FOO in subprocess is bar
+: in h FOO is not defined
+: in h FOO is bar
+
+** Conclusions
+
+   EXPORTED variables are visible to other commands.
+
+
+
+
+* Raw stuff - move up
+# #
+# # Exporting variables to subshells
+# #
+# $ export -p | grep FOO
+# $ # FOO is not exported
+
+# $ FOO=bar
+# $ export -p | grep FOO
+# $ # FOO is still not exported
+
+# $ export FOO=baz
+# $ export -p | grep FOO
+# declare -x FOO="baz"
+# # Q: but as we see below, non-exported variables are
+# #    inherited by subproceses (probably as a conseuqence
+# #    of fork(2).  When are exports neeed?
+
+
+# #
+# # Testing scoping of varibles in subshells
+# #
+
+# # Q: are variable in a sub-shell local to that shell?
+# unset FOO
+# FOO=bar
+# function blort {
+#     (
+#         echo FOO inside blort is $FOO;
+#         FOO=foo-inside;
+#         echo FOO inside blort is $FOO after setting
+#     )
+# }
+# blort
+# echo FOO outside blort after call to baz is $FOO
+# # A: yes. FOO did not change outside the function.
+# #
+# # Commentary.  This seems like a "safe" way to
+# #   lmit namespace pollution and side-effects in bash,
+# #   as long as you don't find the fork/exec overhead.
+
+# #
+# # Figure how EXPORT works/when needed.
+# #
+
+# # inital state: FOO unbound
+# unset FOO
+# set -u
+# echo $FOO
+# #bash: FOO: unbound variable
+
+# # FOO set to bar
+# FOO=bar
+
+# #
+# function f { echo FOO is $FOO; }
+# f
+# #FOO is bar
+# function g { (echo FOO in subprocess is$FOO) }
+# g
+# #FOO in subprocess isbar
+# FOO=foo
+# f
+# #FOO is foo
+# g
+# #FOO in subprocess isfoo
+# cat <<EOF
+# #! /bin/bash
+# set -u
+# echo in h FOO is $FOO
+# EOF
+# chmod +x h
+# unalias h
+# ./h
+# #./h: line 3: FOO: unbound variable
+
+# export FOO=qux
+# ./h
+# # in h FOO is qux
