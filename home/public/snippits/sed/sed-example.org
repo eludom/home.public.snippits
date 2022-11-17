@@ -1,0 +1,11 @@
+#+begin_example
+echo 'abc :results output :eval no' | sed -E 's#.*(results [[:alnum:]]{1,}).*#\1#'
+#+end_example
+
+This demonstrates the following uses of GNU sed:
+
+- Extended regexps :: =-E=
+- Substitution :: =s#OLD#NEW#=
+- Character classes :: =[[:alnum:]]=
+- "bounds" :: ={1,0}= (could be =+=)
+- replacement :: =s#(FOO)#\1#=
