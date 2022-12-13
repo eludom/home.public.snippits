@@ -5,15 +5,6 @@
 #
 
 import csv
-import sys
-
-files = sys.argv[1:]
-
-if len(files) == 0:
-    sys.stderr.write("Usage: read_csv.py file [file...]\n")
-    sys.exit(1)
-
-MAXLINES = 10000
 
 # # Define data
 # data = [

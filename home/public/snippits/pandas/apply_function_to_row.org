@@ -1,0 +1,47 @@
+https://www.geeksforgeeks.org/apply-function-to-every-row-in-a-pandas-dataframe/
+
+#+begin_src python :results output
+import pandas as pd
+import numpy as np
+
+def normalize(x, y):
+    x_new = ((x - np.mean([x, y])) /
+             (max(x, y) - min(x, y)))
+
+    # print(x_new)
+    return x_new
+
+def main():
+
+    # create a dictionary with three fields each
+    data = {
+        'X':[1, 2, 3],
+        'Y':[45, 65, 89] }
+
+    # Convert the dictionary into DataFrame
+    df = pd.DataFrame(data)
+    print("Original DataFrame:\n", df)
+
+    df['X'] = df.apply(lambda row : normalize(row['X'],
+                                  row['Y']), axis = 1)
+
+    print('\nNormalized:')
+    print(df)
+
+main()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Original DataFrame:
+    X   Y
+0  1  45
+1  2  65
+2  3  89
+
+Normalized:
+     X   Y
+0 -0.5  45
+1 -0.5  65
+2 -0.5  89
+#+end_example

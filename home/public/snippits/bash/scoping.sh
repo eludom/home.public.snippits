@@ -76,3 +76,42 @@ echo FOO outside blort after call to baz is $FOO
 # Commentary.  This seems like a "safe" way to
 #   lmit namespace pollution and side-effects in bash,
 #   as long as you don't find the fork/exec overhead.
+
+#
+# Figure how EXPORT works/when needed.
+#
+
+# inital state: FOO unbound
+unset FOO
+set -u
+echo $FOO
+#bash: FOO: unbound variable
+
+# FOO set to bar
+FOO=bar
+
+#
+function f { echo FOO is $FOO; }
+f
+#FOO is bar
+function g { (echo FOO in subprocess is$FOO) }
+g
+#FOO in subprocess isbar
+FOO=foo
+f
+#FOO is foo
+g
+#FOO in subprocess isfoo
+cat <<EOF
+#! /bin/bash
+set -u
+echo in h FOO is $FOO
+EOF
+chmod +x h
+unalias h
+./h
+#./h: line 3: FOO: unbound variable
+
+export FOO=qux
+./h
+# in h FOO is qux

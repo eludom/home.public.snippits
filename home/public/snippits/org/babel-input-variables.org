@@ -1,0 +1,9 @@
+# This is an org babel example of input variables on the org line
+# https://emacs.stackexchange.com/questions/49092/passing-variable-into-a-org-babel-code-on-export
+
+#+begin_src python :var argument="default value" :results output
+print(argument)
+#+end_src
+
+#+RESULTS:
+: default value

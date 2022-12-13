@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+":";
+exec emacs --quick --script "$0" "$@"
+# -*- mode: emacs-lisp -*-
