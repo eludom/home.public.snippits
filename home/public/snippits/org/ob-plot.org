@@ -1,0 +1,14 @@
+#+NAME: org-level-hist-extended
+#+BEGIN_SRC python :exports both :results file
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+from orgstats import get_dataframe
+
+df, ti = get_dataframe("/home/kotfic/org2")
+df.groupby("Level").size().plot(kind='bar')
+
+plt.savefig("img/analysis-of-org-mode-headings/org-level-hist.png");
+return "img/analysis-of-org-mode-headings/org-level-hist.png"
+#+END_SRC

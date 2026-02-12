@@ -1,0 +1,58 @@
+https://github.com/rksm/org-ai
+
+#+begin_ai
+How do I install org-ai in TECO emacs?
+
+[AI]: As an AI language model, I do not have the capability org-ai in
+TECO Emacs. However, I suggest that you check the official
+documentation of TECO Emacs for steps to install packages and
+add-ons. Additionally, you can also check the official documentation
+of org-ai for any instructions or steps to install it in TECO Emacs
+specifically.
+
+[ME]: OK then, how can I run teco?
+
+[AI]: TECO is a text editor and programming language that was
+primarily developed for the PDP-10 operating system in the 1960s and
+1970s. It's a little bit different from modern text editors, as it
+doesn't have a graphical interface and is all done through the command
+line.
+
+If you're interested in using TECO, you may be able to find a modern
+implementation of the text editor that runs on your preferred
+operating system. However, if you have access to a PDP-10 system, you
+can run TECO by doing the following:
+
+1. Log in to the PDP-10 system.
+2. Type `TECO` at the command prompt and press Enter.
+3. TECO will start up and display a command prompt (usually `.` or `%`).
+4. You can then begin entering TECO commands and editing text. The syntax for TECO commands can be a bit complex, so you may want to consult a TECO reference manual or tutorial for guidance.
+
+TECO has a bit of a learning curve, but it can be a powerful and
+flexible text editor if you're willing to put in the time to learn it.
+
+[ME]:
+#+end_ai
+
+#+begin_ai :image :size 256x256
+Make an image of Someone kicking a baseball through a football goalpost
+#+end_ai
+[[file:/home/gmj/Org/org-ai-images/20230513_256x256_image.png]]
+
+#+begin_ai :image :size 256x256
+Make an image of Dorothy Gale riding a bucking bronco
+#+end_ai
+[[file:/home/gmj/Org/org-ai-images/20230513_256x256_image_1.png]]
+
+#+begin_ai :image :size 256x256
+Make an image of Dorothy Gale of Kanasas riding a bucking bronco
+#+end_ai
+[[file:/home/gmj/Org/org-ai-images/20230513_256x256_image_2.png]]
+
+#+begin_ai :image :size 256x256
+Make an image of Dorothy Gale of Kanasas riding a bucking bronco with
+the wicked witch flying on her broom in the background and a tornado
+behind that
+#+end_ai
+[[file:/home/gmj/Org/org-ai-images/20230513_256x256_image_5.png]]
+[[file:/home/gmj/Org/org-ai-images/20230513_256x256_image_4.png]]

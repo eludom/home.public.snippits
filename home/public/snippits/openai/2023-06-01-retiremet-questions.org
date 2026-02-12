@@ -1,0 +1,83 @@
+https://github.com/rksm/org-ai
+
+#+begin_ai
+ When do you have to file for meidcare?
+#+end_ai
+
+https://github.com/rksm/org-ai
+
+#+begin_ai
+How do I install org-ai in TECO emacs?
+
+[AI]: I'm sorry, as an language model AI, I don't have the ability to perform actions on your local machine. However, I can provide you with some general guidance on installing org-ai in Emacs:
+
+1. Make sure you have the latest version of Emacs installed on your system.
+
+2. Install the Org mode if you don't have it already. You can install it via the "package-install" command or by downloading and installing it manually.
+
+3. Download and install the org-ai package. You can either download the package from its Git repository or install it using the Emacs package manager. To use the package manager, type "M-x package
+#+end_ai
+
+#+begin_ai
+When do you file for medicare?
+
+[AI]: As an AI language model, I don't have a personal experience or
+preference. However, most people become eligible for Medicare when
+they turn 65 years old or if they're under 65 with certain
+disabilities, such as End-Stage Renal Disease (ESRD) or Amyotrophic
+Lateral Sclerosis (ALS). It's recommended to enroll in Medicare during
+the Initial Enrollment Period (IEP), which is a 7-month period that
+includes the three months before the month you turn 65, the month of
+your birthday, and the three months
+after your birthday. If you miss your IEP, you can enroll during the General Enrollment Period (GEP) that runs from January 1 to March 31 each year, but you may face a late enrollment penalty.
+
+[ME]:
+#+end_ai
+
+#+begin_ai
+Is my openai key set?
+I'm sorry, but as an AI language model, I don't have access to personal information about users unless it has been shared with me during our conversation. I am designed to respect user privacy and confidentiality. Therefore, I am not able to check or determine if your OpenAI key is set.
+
+[ME]: OK, but if I'm getting this response via a chat interface,
+doesn't it mean that my key is set correctly?
+
+If you are receiving a response from the OpenAI language model via a
+chat interface, it generally indicates that your OpenAI key has been
+properly set and that you are able to communicate with the
+model. However, it's always a good idea to double-check your key
+settings to ensure they are correct and properly configured for your
+specific use case.
+
+
+[ME]: Who was the last .400 hitter?
+The last player to achieve a batting average of .400 or higher in a
+single season in Major League Baseball was Ted Williams of the Boston
+Red Sox. He achieved a batting average of .406 in the 1941 season.
+
+
+[ME]: Were Joe Nuxhall and Johnny Bench teamates?
+Yes, Joe Nuxhall and Johnny Bench were teammates. They both played for
+the Cincinnati Reds in Major League Baseball. Nuxhall was a pitcher
+who played for the Reds from 1944 to 1966, while Bench was a catcher
+who played for the team from 1967 to 1983.
+
+
+[ME]: But if Nuxhall retired in 66 and bench started in 67, were they
+on the same team the same year?
+Apologies for the incorrect information in my previous response. You
+are correct, Joe Nuxhall retired in 1966 and Johnny Bench started
+playing for the Cincinnati Reds in 1967. Therefore, they were not
+teammates and did not play on the same team in the same year.
+
+[ME]: Where they in spring training together?
+It's possible that Joe Nuxhall and Johnny Bench were in spring
+training together during a transitional period where Nuxhall was
+retiring and Bench was getting ready to start his career. However, I
+do not have access to specific information regarding their spring
+training schedules. It would be best to consult historical records or
+resources that specialize in the Cincinnati Reds to get accurate
+information on their spring training participation.
+
+
+[ME]:
+#+end_ai

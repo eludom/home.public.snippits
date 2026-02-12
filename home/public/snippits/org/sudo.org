@@ -1,0 +1,41 @@
+* Run a command as sudo in a bash block
+
+** Running sudo in tramp works
+
+#+begin_example
+,#+BEGIN_SRC bash :dir /sudo::/home/gmj/ :eval never-export 
+  date
+  sudo id
+,#+END_SRC
+#+end_example
+
+
+#+BEGIN_SRC bash :dir /sudo::/home/gmj/ :eval never-export :exports results
+  date
+  sudo id
+#+END_SRC
+
+#+RESULTS:
+| Sun         | Nov         |             23 | 08:23:12 | AM | EST | 2025 |
+| uid=0(root) | gid=0(root) | groups=0(root) |          |    |     |      |
+
+** Several other things are problimatic
+
+I tried several other options, including variants of 
+
+#+begin_quote
+#+begin_src bash :var pwd="xxx"
+  echo "$pwd" | sudo -S id
+#+end_src
+#+end_quote
+
+which seemed to fail.  In this scenario, sudo still prompted for the
+password but seemed to use the one on stdin.
+
+I have a "!" in my password so I was concerned that the shell might
+be interreting that.
+
+I also tried a few askpass options, but nothing seemed to work well.
+
+Only the tramp option above seems to be reliable.
+
