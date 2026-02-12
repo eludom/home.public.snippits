@@ -25,6 +25,8 @@ def main():
     df['X'] = df.apply(lambda row : normalize(row['X'],
                                   row['Y']), axis = 1)
 
+    df["Ydiv10"] = df["Y"] / 10
+
     print('\nNormalized:')
     print(df)
 
@@ -40,8 +42,8 @@ Original DataFrame:
 2  3  89
 
 Normalized:
-     X   Y
-0 -0.5  45
-1 -0.5  65
-2 -0.5  89
+     X   Y  Ydiv10
+0 -0.5  45     4.5
+1 -0.5  65     6.5
+2 -0.5  89     8.9
 #+end_example

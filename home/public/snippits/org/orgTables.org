@@ -1,3 +1,5 @@
+#+last_saved: 2026-02-08 08:10
+
   * Fun with name fields and recalculation in org tables
    See http://orgmode.org/org.html#Advanced-features
 
@@ -8,11 +10,54 @@
      | # | Maximum |     11 |     15 |   1000 |  1026 | 205.2 |
      | ^ |         |     m1 |     m2 |     m3 |    mt |       |
      |---+---------+--------+--------+--------+-------+-------|
-     | # | Peter   |     10 |      8 |    -10 |     8 |   1.6 |
+     | # | Peter   |     10 |      8 |    999 |  1017 | 203.4 |
      | # | Sam     |      2 |      6 |      3 |    11 |   2.2 |
      |---+---------+--------+--------+--------+-------+-------|
-     |   | Average |        |        |        |   9.5 |       |
+     |   | Average |        |        |        | 514.0 |       |
      | ^ |         |        |        |        |    at |       |
      | $ | max=50  |        |        |        |       |       |
      |---+---------+--------+--------+--------+-------+-------|
      #+TBLFM: $6=vsum($P1..$P3)::$7=10*$Tot/$max;%.1f::$at=vmean(@-II..@-I);%.1f
+
+* Org tables form org help
+Here is an example of a table that collects exam results of students and makes use of these features:
+
+|---+---------+--------+--------+--------+-------+-------|
+|   | Student | Prob 1 | Prob 2 | Prob 3 | Total |  Note |
+|---+---------+--------+--------+--------+-------+-------|
+| ! |         |     P1 |     P2 |     P3 |   Tot |       |
+| # | Maximum |     10 |   1015 |     25 |  1050 | 210.0 |
+| ^ |         |     m1 |     m2 |     m3 |    mt |       |
+|---+---------+--------+--------+--------+-------+-------|
+| # | Peter   |     10 |      8 |     23 |    41 |   8.2 |
+| # | Sam     |      2 |      4 |      3 |     9 |   1.8 |
+|---+---------+--------+--------+--------+-------+-------|
+|   | Average |        |        |        |  25.0 |       |
+| ^ |         |        |        |        |    at |       |
+| $ | max=50  |        |        |        |       |       |
+|---+---------+--------+--------+--------+-------+-------|
+#+TBLFM: $6=vsum($P1..$P3)::$7=10*$Tot/$max;%.1f::$at=vmean(@-II..@-I);%.1f
+Important: Please note that for these special tables, recalculating the table with C-u C-c * only affects rows that are marked ‘#’ or ‘*’, and fields that have a formula assigned to the field itself. The column formulas are not applied in rows with empty first field.
+
+The marking characters have the following meaning:
+
+‘!’
+The fields in this line define names for the columns, so that you may refer to a column as ‘$Tot’ instead of ‘$6’.
+
+‘^’
+This row defines names for the fields above the row. With such a definition, any formula in the table may use ‘$m1’ to refer to the value ‘10’. Also, if you assign a formula to a names field, it is stored as ‘$name = ...’.
+
+‘_’
+Similar to ‘^’, but defines names for the fields in the row below.
+
+‘$’
+Fields in this row can define parameters for formulas. For example, if a field in a ‘$’ row contains ‘max=50’, then formulas in this table can refer to the value 50 using ‘$max’. Parameters work exactly like constants, only that they can be defined on a per-table basis.
+
+‘#’
+Fields in this row are automatically recalculated when pressing TAB or RET or S-TAB in this row. Also, this row is selected for a global recalculation with C-u C-c *. Unmarked lines are left alone by this command.
+
+‘*’
+Selects this line for global recalculation with C-u C-c *, but not for automatic recalculation. Use this when automatic recalculation slows down editing too much.
+
+‘/’
+Do not export this line. Useful for lines that contain the narrowing ‘<N>’ markers or column group markers.
